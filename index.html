@@ -215,11 +215,81 @@
         line-height: 1.7;
       }
 
+      /* Name field */
+      .field {
+        margin-top: 26px;
+        text-align: left;
+      }
+      .field label {
+        display: block;
+        margin-bottom: 8px;
+        padding-left: 4px;
+        font-size: 0.72rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--gold-1);
+        opacity: 0.9;
+      }
+      .field label span {
+        color: var(--rose-1);
+      }
+      .field input {
+        width: 100%;
+        padding: 15px 18px;
+        border-radius: 14px;
+        border: 1.5px solid rgba(249, 226, 168, 0.28);
+        background: rgba(255, 255, 255, 0.07);
+        color: #fff;
+        font:
+          400 1rem "Poppins",
+          sans-serif;
+        outline: none;
+        transition:
+          border-color 0.25s,
+          box-shadow 0.25s,
+          background 0.25s;
+      }
+      .field input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .field input:focus {
+        border-color: var(--gold-2);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 0 4px rgba(232, 185, 90, 0.15);
+      }
+      .field.error input {
+        border-color: #ff4d6d;
+        box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.18);
+      }
+      .field.shake {
+        animation: shake 0.45s;
+      }
+      @keyframes shake {
+        20%,
+        60% {
+          transform: translateX(-7px);
+        }
+        40%,
+        80% {
+          transform: translateX(7px);
+        }
+      }
+      .err-msg {
+        display: none;
+        margin-top: 8px;
+        padding-left: 4px;
+        font-size: 0.82rem;
+        color: #ff8fa3;
+      }
+      .field.error .err-msg {
+        display: block;
+      }
+
       .buttons {
         display: flex;
         flex-direction: column;
         gap: 14px;
-        margin-top: 32px;
+        margin-top: 26px;
       }
       @media (min-width: 480px) {
         .buttons {
@@ -391,6 +461,19 @@
           with you.
         </p>
 
+        <div class="field" id="nameField">
+          <label for="nameInput">Your name <span>*</span></label>
+          <input
+            id="nameInput"
+            type="text"
+            placeholder="Enter your name"
+            maxlength="60"
+            autocomplete="name"
+            required
+          />
+          <div class="err-msg">Please enter your name first 💕</div>
+        </div>
+
         <div class="buttons">
           <button class="primary" id="yes1">Yes 💖</button>
           <button class="secondary" id="yes2">Of course yes 😍</button>
@@ -399,7 +482,7 @@
 
       <section class="result" id="result">
         <div class="big">💞</div>
-        <h2>Yayyy, you said yes!</h2>
+        <h2 id="resultTitle">Yayyy, you said yes!</h2>
         <div class="divider"></div>
         <p class="sub">
           You've made me the happiest person in the world.<br />Forever starts
@@ -410,7 +493,6 @@
 
     <script>
       // ====== CONFIG ======
-      // Get your key at https://web3forms.com (it is emailed to shafrikaterr@gmail.com)
       const ACCESS_KEY = "a6032d76-aa83-43dc-8a36-6c346a349db3";
       // ====================
 
@@ -512,12 +594,37 @@
         setTimeout(() => burst(innerWidth * 0.8, innerHeight * 0.4, 90), 600);
       }
 
+      /* ---------- Name validation ---------- */
+      const nameInput = document.getElementById("nameInput");
+      const nameField = document.getElementById("nameField");
+
+      nameInput.addEventListener("input", () =>
+        nameField.classList.remove("error"),
+      );
+
+      function nameIsValid() {
+        const ok = nameInput.value.trim().length > 0;
+        if (!ok) {
+          nameField.classList.add("error");
+          nameField.classList.remove("shake");
+          void nameField.offsetWidth; // restart animation
+          nameField.classList.add("shake");
+          nameInput.focus();
+        }
+        return ok;
+      }
+
       /* ---------- Send answer to email (Web3Forms) ---------- */
       async function sendAnswer(choice) {
+        if (!nameIsValid()) return;
+        const name = nameInput.value.trim();
+
         document.getElementById("yes1").disabled = true;
         document.getElementById("yes2").disabled = true;
 
         // Show the celebration first, email is sent in the background
+        document.getElementById("resultTitle").textContent =
+          "Yayyy " + name + ", you said yes!";
         document.getElementById("question").classList.add("hide");
         document.getElementById("result").classList.add("show");
         celebrate();
@@ -531,8 +638,9 @@
             },
             body: JSON.stringify({
               access_key: ACCESS_KEY,
-              subject: "💍 Someone said YES!",
+              subject: "💍 " + name + " said YES!",
               from_name: "Marry Me Website",
+              name: name,
               answer: choice,
               time: new Date().toLocaleString(),
               device: navigator.userAgent,
@@ -550,6 +658,9 @@
       document
         .getElementById("yes2")
         .addEventListener("click", () => sendAnswer("Of course yes"));
+      nameInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") document.getElementById("yes1").click();
+      });
     </script>
   </body>
 </html>
