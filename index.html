@@ -384,7 +384,7 @@
         </svg>
 
         <p class="eyebrow">A question from my heart</p>
-        <h1>Will You<br />Marry Me?</h1>
+        <h1>Will you<br />marry me?</h1>
         <div class="divider"></div>
         <p class="sub">
           My story feels incomplete without you.<br />One beautiful life, just
@@ -409,7 +409,10 @@
     </main>
 
     <script>
-      const EMAIL = "shafrikaterr@gmail.com";
+      // ====== CONFIG ======
+      // Get your key at https://web3forms.com (it is emailed to shafrikaterr@gmail.com)
+      const ACCESS_KEY = "a6032d76-aa83-43dc-8a36-6c346a349db3";
+      // ====================
 
       /* ---------- Falling petals ---------- */
       const petalIcons = ["🌸", "🌹", "💗", "✨", "🤍"];
@@ -509,7 +512,7 @@
         setTimeout(() => burst(innerWidth * 0.8, innerHeight * 0.4, 90), 600);
       }
 
-      /* ---------- Send email (silent, no alert) ---------- */
+      /* ---------- Send answer to email (Web3Forms) ---------- */
       async function sendAnswer(choice) {
         document.getElementById("yes1").disabled = true;
         document.getElementById("yes2").disabled = true;
@@ -520,22 +523,22 @@
         celebrate();
 
         try {
-          const res = await fetch("https://formsubmit.co/ajax/" + EMAIL, {
+          const res = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
             },
             body: JSON.stringify({
-              _subject: "💍 Someone said YES!",
-              _captcha: "false",
-              _template: "table",
+              access_key: ACCESS_KEY,
+              subject: "💍 Someone said YES!",
+              from_name: "Marry Me Website",
               answer: choice,
               time: new Date().toLocaleString(),
               device: navigator.userAgent,
             }),
           });
-          console.log("FormSubmit:", await res.json());
+          console.log("Web3Forms:", await res.json());
         } catch (err) {
           console.error("Email send failed:", err);
         }
