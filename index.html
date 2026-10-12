@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Will You Marry Me? 💍</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500;1,700&family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --gold-1: #f9e2a8;
+        --gold-2: #e8b95a;
+        --gold-3: #b8832b;
+        --rose-1: #ff7aa2;
+        --rose-2: #e0316b;
+        --bg-1: #12040c;
+        --bg-2: #2a0a1a;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: "Poppins", system-ui, sans-serif;
+        color: #fff;
+        background:
+          radial-gradient(1200px 700px at 15% 10%, #4a0f2c 0%, transparent 60%),
+          radial-gradient(1000px 700px at 90% 90%, #3a0d3f 0%, transparent 60%),
+          linear-gradient(160deg, var(--bg-2), var(--bg-1));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 20px;
+      }
+
+      /* Glow orbs */
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.5;
+        z-index: 0;
+        animation: drift 14s ease-in-out infinite alternate;
+      }
+      .orb.o1 {
+        width: 340px;
+        height: 340px;
+        background: #e0316b;
+        top: -80px;
+        left: -80px;
+      }
+      .orb.o2 {
+        width: 300px;
+        height: 300px;
+        background: #b8832b;
+        bottom: -90px;
+        right: -60px;
+        animation-delay: -5s;
+        opacity: 0.35;
+      }
+      .orb.o3 {
+        width: 240px;
+        height: 240px;
+        background: #7b2cbf;
+        top: 45%;
+        left: 60%;
+        animation-delay: -9s;
+        opacity: 0.3;
+      }
+      @keyframes drift {
+        to {
+          transform: translate(60px, 40px) scale(1.15);
+        }
+      }
+
+      canvas#fx {
+        position: fixed;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+      }
+      .petal {
+        position: fixed;
+        top: -30px;
+        z-index: 1;
+        pointer-events: none;
+        animation: petalFall linear forwards;
+        opacity: 0.85;
+      }
+      @keyframes petalFall {
+        to {
+          transform: translate(var(--dx), 110vh) rotate(var(--rot));
+          opacity: 0.2;
+        }
+      }
+
+      /* Card */
+      .card {
+        position: relative;
+        z-index: 2;
+        width: min(94vw, 520px);
+        padding: 52px 34px 44px;
+        text-align: center;
+        border-radius: 32px;
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.03)
+        );
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        box-shadow:
+          0 30px 80px rgba(0, 0, 0, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        animation: cardIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      }
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1.2px;
+        background: linear-gradient(
+          140deg,
+          var(--gold-1),
+          transparent 35%,
+          transparent 65%,
+          var(--rose-1)
+        );
+        -webkit-mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+      @keyframes cardIn {
+        from {
+          opacity: 0;
+          transform: translateY(40px) scale(0.96);
+        }
+      }
+
+      .ring {
+        width: 92px;
+        height: 92px;
+        margin: 0 auto 22px;
+        filter: drop-shadow(0 0 18px rgba(249, 226, 168, 0.55));
+        animation: float 3.5s ease-in-out infinite;
+      }
+      @keyframes float {
+        50% {
+          transform: translateY(-10px) rotate(-3deg);
+        }
+      }
+
+      .eyebrow {
+        font-size: 0.72rem;
+        letter-spacing: 0.42em;
+        text-transform: uppercase;
+        color: var(--gold-1);
+        opacity: 0.85;
+        margin-bottom: 14px;
+      }
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-style: italic;
+        font-weight: 700;
+        font-size: clamp(2.3rem, 9vw, 3.4rem);
+        line-height: 1.12;
+        background: linear-gradient(
+          120deg,
+          var(--gold-1),
+          var(--gold-2) 40%,
+          #fff3d1 55%,
+          var(--gold-2) 70%,
+          var(--gold-3)
+        );
+        background-size: 220% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: shine 5s linear infinite;
+      }
+      @keyframes shine {
+        to {
+          background-position: 220% center;
+        }
+      }
+      .divider {
+        width: 90px;
+        height: 1px;
+        margin: 22px auto;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold-2),
+          transparent
+        );
+      }
+      .sub {
+        font-weight: 300;
+        font-size: 0.98rem;
+        color: rgba(255, 255, 255, 0.72);
+        line-height: 1.7;
+      }
+
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 32px;
+      }
+      @media (min-width: 480px) {
+        .buttons {
+          flex-direction: row;
+        }
+        .buttons button {
+          flex: 1;
+        }
+      }
+
+      button {
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        border: none;
+        padding: 16px 22px;
+        border-radius: 16px;
+        font:
+          600 1rem "Poppins",
+          sans-serif;
+        letter-spacing: 0.02em;
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s,
+          opacity 0.25s;
+      }
+      button.primary {
+        color: #3a0d1f;
+        background: linear-gradient(
+          135deg,
+          var(--gold-1),
+          var(--gold-2) 55%,
+          var(--gold-3)
+        );
+        box-shadow: 0 10px 30px rgba(232, 185, 90, 0.35);
+      }
+      button.secondary {
+        color: #fff;
+        background: linear-gradient(135deg, var(--rose-1), var(--rose-2));
+        box-shadow: 0 10px 30px rgba(224, 49, 107, 0.4);
+      }
+      button::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -120%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(
+          100deg,
+          transparent,
+          rgba(255, 255, 255, 0.55),
+          transparent
+        );
+        transform: skewX(-20deg);
+        transition: left 0.7s;
+      }
+      button:hover {
+        transform: translateY(-4px) scale(1.02);
+      }
+      button:hover::after {
+        left: 140%;
+      }
+      button:active {
+        transform: scale(0.97);
+      }
+      button:disabled {
+        opacity: 0.55;
+        cursor: default;
+        pointer-events: none;
+      }
+
+      /* Result */
+      .result {
+        display: none;
+      }
+      .result.show {
+        display: block;
+        animation: pop 0.9s cubic-bezier(0.2, 0.9, 0.2, 1.2) both;
+      }
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: scale(0.85) translateY(20px);
+        }
+      }
+      .result .big {
+        font-size: 3.4rem;
+        margin-bottom: 8px;
+        animation: beat 1.3s ease-in-out infinite;
+        display: inline-block;
+      }
+      @keyframes beat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        15% {
+          transform: scale(1.18);
+        }
+        30% {
+          transform: scale(1);
+        }
+        45% {
+          transform: scale(1.12);
+        }
+      }
+      .result h2 {
+        font-family: "Playfair Display", serif;
+        font-style: italic;
+        font-size: clamp(1.9rem, 7vw, 2.6rem);
+        margin-bottom: 8px;
+        background: linear-gradient(120deg, var(--gold-1), var(--gold-2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .question.hide {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+    <canvas id="fx"></canvas>
+
+    <main class="card">
+      <section class="question" id="question">
+        <svg
+          class="ring"
+          viewBox="0 0 100 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#f9e2a8" />
+              <stop offset=".55" stop-color="#e8b95a" />
+              <stop offset="1" stop-color="#b8832b" />
+            </linearGradient>
+            <linearGradient id="d" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffffff" />
+              <stop offset="1" stop-color="#9fdcff" />
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="64" r="24" stroke="url(#g)" stroke-width="7" />
+          <path
+            d="M38 28 L44 18 H56 L62 28 L50 44 Z"
+            fill="url(#d)"
+            stroke="#fff"
+            stroke-opacity=".7"
+            stroke-width="1.2"
+          />
+          <path
+            d="M38 28 H62 M44 18 L50 28 L56 18 M50 28 V44"
+            stroke="#bfe6ff"
+            stroke-opacity=".8"
+            stroke-width=".8"
+          />
+        </svg>
+
+        <p class="eyebrow">A question from my heart</p>
+        <h1>Will you<br />marry me?</h1>
+        <div class="divider"></div>
+        <p class="sub">
+          My story feels incomplete without you.<br />One beautiful life, just
+          with you.
+        </p>
+
+        <div class="buttons">
+          <button class="primary" id="yes1">Yes 💖</button>
+          <button class="secondary" id="yes2">Of course yes 😍</button>
+        </div>
+      </section>
+
+      <section class="result" id="result">
+        <div class="big">💞</div>
+        <h2>Yayyy, you said yes!</h2>
+        <div class="divider"></div>
+        <p class="sub">
+          You've made me the happiest person in the world.<br />Forever starts
+          now. ✨
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const EMAIL = "shafrikaterr@gmail.com";
+
+      /* ---------- Falling petals ---------- */
+      const petalIcons = ["🌸", "🌹", "💗", "✨", "🤍"];
+      function spawnPetal() {
+        const p = document.createElement("div");
+        p.className = "petal";
+        p.textContent =
+          petalIcons[Math.floor(Math.random() * petalIcons.length)];
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.fontSize = 12 + Math.random() * 16 + "px";
+        p.style.setProperty("--dx", Math.random() * 160 - 80 + "px");
+        p.style.setProperty("--rot", Math.random() * 720 - 360 + "deg");
+        const dur = 7 + Math.random() * 7;
+        p.style.animationDuration = dur + "s";
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), dur * 1000);
+      }
+      setInterval(spawnPetal, 600);
+
+      /* ---------- Confetti / heart burst (canvas) ---------- */
+      const canvas = document.getElementById("fx");
+      const ctx = canvas.getContext("2d");
+      function resize() {
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+      }
+      resize();
+      addEventListener("resize", resize);
+
+      let parts = [],
+        running = false;
+      const palette = [
+        "#f9e2a8",
+        "#e8b95a",
+        "#ff7aa2",
+        "#e0316b",
+        "#ffffff",
+        "#c77dff",
+      ];
+
+      function burst(x, y, count = 140) {
+        for (let i = 0; i < count; i++) {
+          const a = Math.random() * Math.PI * 2;
+          const s = 4 + Math.random() * 9;
+          parts.push({
+            x,
+            y,
+            vx: Math.cos(a) * s,
+            vy: Math.sin(a) * s - 4,
+            g: 0.16 + Math.random() * 0.08,
+            size: 6 + Math.random() * 8,
+            rot: Math.random() * 6,
+            vr: (Math.random() - 0.5) * 0.3,
+            color: palette[Math.floor(Math.random() * palette.length)],
+            heart: Math.random() < 0.45,
+            life: 1,
+          });
+        }
+        if (!running) {
+          running = true;
+          requestAnimationFrame(loop);
+        }
+      }
+      function drawHeart(s) {
+        ctx.beginPath();
+        ctx.moveTo(0, s * 0.3);
+        ctx.bezierCurveTo(-s, -s * 0.5, -s * 0.5, -s * 1.1, 0, -s * 0.4);
+        ctx.bezierCurveTo(s * 0.5, -s * 1.1, s, -s * 0.5, 0, s * 0.3);
+        ctx.fill();
+      }
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        parts = parts.filter((p) => p.life > 0 && p.y < canvas.height + 40);
+        for (const p of parts) {
+          p.vy += p.g;
+          p.vx *= 0.992;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.life -= 0.007;
+          ctx.save();
+          ctx.globalAlpha = Math.max(p.life, 0);
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          if (p.heart) drawHeart(p.size);
+          else ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+          ctx.restore();
+        }
+        if (parts.length) requestAnimationFrame(loop);
+        else running = false;
+      }
+
+      function celebrate() {
+        burst(innerWidth / 2, innerHeight * 0.55, 180);
+        setTimeout(() => burst(innerWidth * 0.2, innerHeight * 0.4, 90), 350);
+        setTimeout(() => burst(innerWidth * 0.8, innerHeight * 0.4, 90), 600);
+      }
+
+      /* ---------- Send email (silent, no alert) ---------- */
+      async function sendAnswer(choice) {
+        document.getElementById("yes1").disabled = true;
+        document.getElementById("yes2").disabled = true;
+
+        // Show the celebration first, email is sent in the background
+        document.getElementById("question").classList.add("hide");
+        document.getElementById("result").classList.add("show");
+        celebrate();
+
+        try {
+          const res = await fetch("https://formsubmit.co/ajax/" + EMAIL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              _subject: "💍 Someone said YES!",
+              _captcha: "false",
+              _template: "table",
+              answer: choice,
+              time: new Date().toLocaleString(),
+              device: navigator.userAgent,
+            }),
+          });
+          console.log("FormSubmit:", await res.json());
+        } catch (err) {
+          console.error("Email send failed:", err);
+        }
+      }
+
+      document
+        .getElementById("yes1")
+        .addEventListener("click", () => sendAnswer("Yes"));
+      document
+        .getElementById("yes2")
+        .addEventListener("click", () => sendAnswer("Of course yes"));
+    </script>
+  </body>
+</html>
